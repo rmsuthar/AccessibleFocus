@@ -39,22 +39,30 @@ var aoDialog = /** @class */ (function () {
                     break;
             }
         };
-        this.el = el;
         this.dialogEl = document.querySelector(el);
         this.initiateDialog();
     }
+    aoDialog.prototype.notIn = function (arr) {
+        return function (item) {
+            return arr.indexOf(item) < 0;
+        };
+    };
     aoDialog.prototype.closeDialog = function () {
         var _a;
-        //this.dialogEl?.removeEventListener('keydown',(e:KeyboardEvent)=>{},true);
         (_a = this.dialogEl) === null || _a === void 0 ? void 0 : _a.removeEventListener('keydown', this.keyDownListener, true);
     };
     aoDialog.prototype.initiateDialog = function () {
-        var _a, _b;
-        this.focusableElments = (_a = this.dialogEl) === null || _a === void 0 ? void 0 : _a.querySelectorAll('a[href], area[href], input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex="0"], iframe, embed');
-        this.focusableArr = Array.prototype.slice.call(this.focusableElments);
-        this.firstElm = this.focusableArr[0];
-        this.lastElm = this.focusableArr[this.focusableArr.length - 1];
-        (_b = this.dialogEl) === null || _b === void 0 ? void 0 : _b.addEventListener('keydown', this.keyDownListener, true);
+        var _this = this;
+        var _a, _b, _c;
+        this.focusableElments = (_a = this.dialogEl) === null || _a === void 0 ? void 0 : _a.querySelectorAll('a[href], area[href], input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex="0"],iframe, embed');
+        this.excludeElements = (_b = this.dialogEl) === null || _b === void 0 ? void 0 : _b.querySelectorAll('[aria-hidden="true"], [aria-hidden="true"] *');
+        var excludeArr = Array.prototype.slice.call(this.excludeElements);
+        var focusableArr = Array.prototype.slice.call(this.focusableElments);
+        focusableArr = focusableArr.filter(this.notIn(excludeArr));
+        this.firstElm = focusableArr[0];
+        this.lastElm = focusableArr[focusableArr.length - 1];
+        (_c = this.dialogEl) === null || _c === void 0 ? void 0 : _c.addEventListener('keydown', this.keyDownListener, true);
+        setTimeout(function () { var _a; (_a = _this.firstElm) === null || _a === void 0 ? void 0 : _a.focus(); }, 500);
     };
     return aoDialog;
 }());

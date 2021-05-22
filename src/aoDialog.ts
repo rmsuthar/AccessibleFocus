@@ -1,21 +1,24 @@
 class aoDialog {
     dialogEl: HTMLElement | null | undefined;
     focusableElments: NodeListOf<Element> | undefined;
+    excludeElements: NodeListOf<Element> | undefined;
     focusableArr: string[] | undefined;
     firstElm: HTMLElement | undefined;
     lastElm: HTMLElement | undefined;
-    el: string | undefined | null;
     
 
-    constructor(el: string) {
-        this.el = el;
+    constructor(el: string) {        
         this.dialogEl = <HTMLElement | undefined>document.querySelector(el);
         this.initiateDialog();
     }
 
+    notIn(arr:string[]){
+        return function(item:string){
+            return arr.indexOf(item) < 0;
+        }
+    }
 
-    closeDialog() {
-        //this.dialogEl?.removeEventListener('keydown',(e:KeyboardEvent)=>{},true);
+    closeDialog() {        
         this.dialogEl?.removeEventListener('keydown', this.keyDownListener ,true);
     }
 
@@ -54,13 +57,17 @@ class aoDialog {
 
     }
 
-    initiateDialog() {
-        this.focusableElments = this.dialogEl?.querySelectorAll('a[href], area[href], input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex="0"], iframe, embed');
-        this.focusableArr = Array.prototype.slice.call(this.focusableElments);
-        this.firstElm = <HTMLElement><unknown>this.focusableArr[0];
-        this.lastElm = <HTMLElement><unknown>this.focusableArr[this.focusableArr.length - 1];
-
+    initiateDialog() {        
+        this.focusableElments = this.dialogEl?.querySelectorAll('a[href], area[href], input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex="0"],iframe, embed');
+        this.excludeElements = this.dialogEl?.querySelectorAll('[aria-hidden="true"], [aria-hidden="true"] *');
+        let excludeArr = Array.prototype.slice.call(this.excludeElements);
+        let focusableArr = Array.prototype.slice.call(this.focusableElments);
+        focusableArr = focusableArr.filter(this.notIn(excludeArr));
+        this.firstElm = <HTMLElement><unknown> focusableArr[0];
+        this.lastElm = <HTMLElement><unknown> focusableArr[focusableArr.length - 1];
         this.dialogEl?.addEventListener('keydown', this.keyDownListener ,true);
+
+        setTimeout(()=>{this.firstElm?.focus()},500)
     }
 
 
