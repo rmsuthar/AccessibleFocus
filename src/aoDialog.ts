@@ -1,25 +1,18 @@
-class aoDialog {
-    dialogEl: HTMLElement | null | undefined;
+class aoFocus {
+    focusEl: HTMLElement | null | undefined;
     focusableElments: NodeListOf<Element> | undefined;
     excludeElements: NodeListOf<Element> | undefined;
     focusableArr: string[] | undefined;
     firstElm: HTMLElement | undefined;
-    lastElm: HTMLElement | undefined;
-    
+    lastElm: HTMLElement | undefined;   
 
     constructor(el: string) {        
-        this.dialogEl = <HTMLElement | undefined>document.querySelector(el);
-        this.initiateDialog();
-    }
+        this.focusEl = <HTMLElement | undefined>document.querySelector(el);
+        this.initiateFocus();
+    } 
 
-    notIn(arr:string[]){
-        return function(item:string){
-            return arr.indexOf(item) < 0;
-        }
-    }
-
-    closeDialog() {        
-        this.dialogEl?.removeEventListener('keydown', this.keyDownListener ,true);
+    clearFocus() {        
+        this.focusEl?.removeEventListener('keydown', this.keyDownListener ,true);
     }
 
     keyDownListener = (e: KeyboardEvent) => {
@@ -49,7 +42,7 @@ class aoDialog {
                 }
                 break;
             case KEY_ESC:
-                this.closeDialog();
+                this.clearFocus();
                 break;
             default:
                 break;
@@ -57,16 +50,20 @@ class aoDialog {
 
     }
 
-    initiateDialog() {        
-        this.focusableElments = this.dialogEl?.querySelectorAll('a[href], area[href], input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex="0"],iframe, embed');
-        this.excludeElements = this.dialogEl?.querySelectorAll('[aria-hidden="true"], [aria-hidden="true"] *');
+    initiateFocus() {  
+        let notIn = (arr:string[]) =>{
+            return function(item:string){
+                return arr.indexOf(item) < 0;
+            }
+        }      
+        this.focusableElments = this.focusEl?.querySelectorAll('a[href], area[href], input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex="0"],iframe, embed');
+        this.excludeElements = this.focusEl?.querySelectorAll('[aria-hidden="true"], [aria-hidden="true"] *');
         let excludeArr = Array.prototype.slice.call(this.excludeElements);
         let focusableArr = Array.prototype.slice.call(this.focusableElments);
-        focusableArr = focusableArr.filter(this.notIn(excludeArr));
+        focusableArr = focusableArr.filter(notIn(excludeArr));
         this.firstElm = <HTMLElement><unknown> focusableArr[0];
         this.lastElm = <HTMLElement><unknown> focusableArr[focusableArr.length - 1];
-        this.dialogEl?.addEventListener('keydown', this.keyDownListener ,true);
-
+        this.focusEl?.addEventListener('keydown', this.keyDownListener ,true);
         setTimeout(()=>{this.firstElm?.focus()},500)
     }
 
