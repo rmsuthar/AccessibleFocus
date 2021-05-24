@@ -28,3 +28,10 @@ To unset focus.
 ``` javascript
 ao.cleanFocus(); // it will unset focus from last set container.
 ```
+
+To add excluded elements
+
+``` javascript
+ao.excludeElements([".exclude","[aria-disabled]"]); // Pass array of elements
+ao.initiateFocus();
+```

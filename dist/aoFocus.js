@@ -1,4 +1,9 @@
 "use strict";
+var __spreadArray = (this && this.__spreadArray) || function (to, from) {
+    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
+        to[j] = from[i];
+    return to;
+};
 var aoFocus = /** @class */ (function () {
     function aoFocus(el) {
         var _this = this;
@@ -46,22 +51,28 @@ var aoFocus = /** @class */ (function () {
         var _a;
         (_a = this.focusEl) === null || _a === void 0 ? void 0 : _a.removeEventListener('keydown', this.keyDownListener, true);
     };
+    aoFocus.prototype.addExcludeElements = function (arr) {
+        this.excludeElements = arr;
+    };
     aoFocus.prototype.initiateFocus = function () {
         var _this = this;
-        var _a, _b, _c;
+        var _a, _b, _c, _d;
         var notIn = function (arr) {
             return function (item) {
                 return arr.indexOf(item) < 0;
             };
         };
         this.focusableElments = (_a = this.focusEl) === null || _a === void 0 ? void 0 : _a.querySelectorAll('a[href], area[href], input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex="0"],iframe, embed');
-        this.excludeElements = (_b = this.focusEl) === null || _b === void 0 ? void 0 : _b.querySelectorAll('[aria-hidden="true"], [aria-hidden="true"] *');
-        var excludeArr = Array.prototype.slice.call(this.excludeElements);
+        var excludeElements = (_b = this.focusEl) === null || _b === void 0 ? void 0 : _b.querySelectorAll('[aria-hidden="true"], [aria-hidden="true"] *');
+        var excludeArr = Array.prototype.slice.call(excludeElements);
+        if ((_c = this.excludeElements) === null || _c === void 0 ? void 0 : _c.length) {
+            excludeArr = __spreadArray([], this.excludeElements);
+        }
         var focusableArr = Array.prototype.slice.call(this.focusableElments);
         focusableArr = focusableArr.filter(notIn(excludeArr));
         this.firstElm = focusableArr[0];
         this.lastElm = focusableArr[focusableArr.length - 1];
-        (_c = this.focusEl) === null || _c === void 0 ? void 0 : _c.addEventListener('keydown', this.keyDownListener, true);
+        (_d = this.focusEl) === null || _d === void 0 ? void 0 : _d.addEventListener('keydown', this.keyDownListener, true);
         setTimeout(function () { var _a; (_a = _this.firstElm) === null || _a === void 0 ? void 0 : _a.focus(); }, 500);
     };
     return aoFocus;

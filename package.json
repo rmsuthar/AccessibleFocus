@@ -3,18 +3,30 @@
   "version": "1.0.0",
   "description": "Utility used to restrict focus based on parent container.",
   "scripts": {
-    "start": "lite-server"
+    "start": "lite-server",
+    "build":"tsc"
   },
+  
   "keywords": [
     "accessible",
     "focus",
     "ADA",
     "restrict focus"
   ],
+  
   "author": "Ravindra M. Suthar <ravindra.suthar@me.com>",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "lite-server": "2.6.1",
     "typescript": "4.2.4"
-  }
+  },
+  "main": "dist/aoFocus.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rmsuthar/AccessibleFocus.git"
+  },
+  "bugs": {
+    "url": "https://github.com/rmsuthar/AccessibleFocus/issues"
+  },
+  "homepage": "https://github.com/rmsuthar/AccessibleFocus#readme"
 }
