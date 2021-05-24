@@ -1,6 +1,6 @@
 {
   "name": "accessible-focus",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Utility used to restrict focus based on parent container.",
   "scripts": {
     "start": "lite-server",

@@ -33,5 +33,5 @@ To add excluded elements
 
 ``` javascript
 ao.excludeElements([".exclude","[aria-disabled]"]); // Pass array of elements
-ao.initiateFocus();
+ao.initiateFocus(); // Intiate focus again!
 ```
